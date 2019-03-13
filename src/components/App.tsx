@@ -1,3 +1,4 @@
+import Button from '@material-ui/core/Button';
 import * as React from 'react';
 
 export interface IAppProps {}
@@ -7,7 +8,9 @@ export default class App extends React.Component<IAppProps, undefined> {
     return (
       <div className='app'>
         <h1>Hello World!</h1>
-        <p>This is santhosh</p>
+        <Button variant='contained' color='primary'>
+          This is santhosh
+        </Button>
       </div>
     );
   }
