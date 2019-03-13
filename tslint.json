@@ -1,0 +1,10 @@
+{
+  "plugins": ["react"],
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier",
+    "tslint-config-airbnb-base",
+    "./lint/rules"
+  ]
+}
