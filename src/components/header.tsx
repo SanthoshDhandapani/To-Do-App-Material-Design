@@ -6,7 +6,7 @@ const Header = memo(() => (
     <AppBar style={{ alignItems: 'center' }}>
       <Toolbar>
         <Typography component='h6' variant='h6' color='inherit' align='center'>
-          Todo App - Material Design
+          To-Do App
         </Typography>
       </Toolbar>
     </AppBar>

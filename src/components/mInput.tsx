@@ -37,6 +37,7 @@ const styles = (theme: IExtendedTheme) => {
 };
 
 interface ICustomizedInputProps extends WithStyles<typeof styles> {
+  floating?: boolean;
   mFormControlProps?: FormControlProps;
   mInputLabelProps?: InputLabelProps;
   mInputProps?: InputProps;
@@ -46,22 +47,25 @@ interface IProps extends React.FunctionComponent<ICustomizedInputProps> {}
 
 const CustomizedInput: IProps = memo(
   ({
+    floating = true,
     classes,
     mFormControlProps,
     mInputLabelProps,
     mInputProps,
   }: ICustomizedInputProps) => (
     <FormControl {...mFormControlProps}>
-      <InputLabel
-        htmlFor='standard-input'
-        classes={{
-          root: classes.cssLabel,
-          focused: classes.cssFocused,
-        }}
-        {...mInputLabelProps}
-      >
-        {mInputLabelProps && mInputLabelProps.children}
-      </InputLabel>
+      {floating && (
+        <InputLabel
+          htmlFor='standard-input'
+          classes={{
+            root: classes.cssLabel,
+            focused: classes.cssFocused,
+          }}
+          {...mInputLabelProps}
+        >
+          {mInputLabelProps && mInputLabelProps.children}
+        </InputLabel>
+      )}
       <Input
         id='standard-input'
         classes={{

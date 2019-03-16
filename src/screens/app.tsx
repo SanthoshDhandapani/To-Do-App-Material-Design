@@ -11,26 +11,35 @@ import Header from '../components/header';
 import { actionsHook, todoHook } from '../hooks';
 
 const App: React.FunctionComponent = (props) => {
-  const { inputValue, ...actions } = actionsHook();
-  const { todos, addTodo } = todoHook();
+  const { actionObj, updateActions, todoObj, ...actions } = actionsHook();
+  const { todos, addTodo, updateTodos, removeTodo } = todoHook();
   return (
     <MuiThemeProvider theme={MuiTheme}>
       <Header />
       <Container>
         <AddTodo
           inputProps={{
-            value: inputValue,
+            value: todoObj.text,
             onChange: actions.changeInput,
           }}
           onEnter={actions.keyInput}
-          value={inputValue}
+          value={todoObj.text}
           onAddClick={addTodo}
           clear={actions.clearInput}
         />
         <ActiveTodoList
+          updateActionsProp={updateActions}
+          actions={actionObj}
+          update={updateTodos}
+          deleteProp={removeTodo}
+          onKeyInput={actions.keyInput}
           todoList={todos.filter((todo) => todo.status === 'active')}
         />
-        <CompletedTodoList />
+        <CompletedTodoList
+          actions={actionObj}
+          deleteProp={removeTodo}
+          completedList={todos.filter((todo) => todo.status === 'completed')}
+        />
       </Container>
     </MuiThemeProvider>
   );

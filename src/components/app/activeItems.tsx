@@ -1,30 +1,27 @@
 import {
-  Divider,
-  Fab,
   Grid,
-  IconButton,
   List,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
   Typography,
   withStyles,
   WithStyles,
 } from '@material-ui/core';
-import Delete from '@material-ui/icons/Delete';
-import Check from '@material-ui/icons/Done';
-import Edit from '@material-ui/icons/Edit';
 import ViewListSharp from '@material-ui/icons/ViewListSharp';
-import React, { Fragment, FunctionComponent, memo } from 'react';
-import { mColors } from '../../assets/colors';
+import React, { memo } from 'react';
 import { IThemeProps } from '../../assets/theme';
+import { IActions } from '../../hooks/actions';
 import { IToDo } from '../../hooks/todo';
 import { style } from '../../styles/components/app/active';
 import CardIcon from '../cardIcon';
 import SectionCard from '../sectionCard';
+import { TodoRow as ActiveTodoRow } from './todoRow';
 
 interface IActiveTodoListComponentProps {
   todoList: IToDo[];
+  actions: IActions;
+  onKeyInput: (e, callBack: () => {}) => {};
+  update: () => any;
+  deleteProp: (id: any) => any;
+  updateActionsProp: (actions: IActions) => any;
 }
 
 interface IProps
@@ -38,73 +35,67 @@ const IconComponent = ({ iconStyle }) => (
   </CardIcon>
 );
 
-const ActiveTodoRow: FunctionComponent<{ todo: IToDo }> = ({ todo }) => (
-  <Fragment>
-    <ListItem key={todo.id}>
-      <Fab
-        aria-label='Check'
-        style={{
-          width: 30,
-          height: 30,
-          minWidth: 0,
-          minHeight: 0,
-          boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
-        }}
-        color={'primary'}
-      >
-        <Check />
-      </Fab>
-      <ListItemText style={{ marginTop: '3px' }} primary={todo.text} />
-      <ListItemSecondaryAction>
-        <IconButton aria-label='Edit'>
-          <Edit fontSize={'small'} style={{ color: mColors.completedLite }} />
-        </IconButton>
-        <IconButton aria-label='Delete'>
-          <Delete fontSize={'small'} style={{ color: '#F44336' }} />
-        </IconButton>
-      </ListItemSecondaryAction>
-    </ListItem>
-    <Divider />
-  </Fragment>
-);
-
-const ActiveTodoList = memo(({ classes, theme, todoList }: IProps) => (
-  <Grid
-    container={true}
-    direction={'row'}
-    alignContent={'center'}
-    justify={'center'}
-    className={classes.layout}
-  >
-    <SectionCard
-      cardIcon={<IconComponent iconStyle={theme.headerSvgIconStyle} />}
-      label={'TODO'}
+const ActiveTodoList = memo(
+  ({
+    actions,
+    classes,
+    deleteProp,
+    theme,
+    onKeyInput,
+    update,
+    updateActionsProp,
+    todoList,
+  }: IProps) => (
+    <Grid
+      container={true}
+      direction={'row'}
+      alignContent={'center'}
+      justify={'center'}
+      className={classes.layout}
     >
-      {todoList.length === 0 ? (
-        <Grid item={true} xs={12}>
-          <Typography
-            align={'center'}
-            variant='body1'
-            color='textSecondary'
-            gutterBottom={true}
-          >
-            No active to do found !
-          </Typography>
-        </Grid>
-      ) : (
-        <Grid container={true} direction={'row'} style={{ marginTop: '-10px' }}>
+      <SectionCard
+        cardIcon={<IconComponent iconStyle={theme.headerSvgIconStyle} />}
+        label={'TO-DO LIST'}
+      >
+        {todoList.length === 0 ? (
           <Grid item={true} xs={12}>
-            <List disablePadding={true}>
-              {todoList.map((todoObj) => (
-                <ActiveTodoRow todo={todoObj} />
-              ))}
-            </List>
+            <Typography
+              align={'center'}
+              variant='body1'
+              color='textSecondary'
+              gutterBottom={true}
+            >
+              No active to do found !
+            </Typography>
           </Grid>
-        </Grid>
-      )}
-    </SectionCard>
-  </Grid>
-));
+        ) : (
+          <Grid
+            container={true}
+            direction={'row'}
+            style={{ marginTop: '-10px' }}
+          >
+            <Grid item={true} xs={12}>
+              <List disablePadding={true}>
+                {todoList.map((todoObj, index) => (
+                  <ActiveTodoRow
+                    actionProps={actions}
+                    deleteItem={deleteProp}
+                    key={todoObj.id}
+                    rowIndex={index}
+                    updateItem={update}
+                    onEnter={onKeyInput}
+                    updateActions={updateActionsProp}
+                    todo={todoObj}
+                  />
+                ))}
+              </List>
+            </Grid>
+          </Grid>
+        )}
+      </SectionCard>
+    </Grid>
+  ),
+);
 
 export default withStyles(style, { withTheme: true })(
   ActiveTodoList as React.FunctionComponent<IActiveTodoListComponentProps>,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-type TodoStatus = 'active' | 'completed';
+type TodoStatus = 'default' | 'active' | 'completed';
 
 export interface IToDo {
   id: number;
@@ -22,18 +22,11 @@ export const todoHook = (initialValue = []) => {
         setTodos([...todos]);
       }
     },
-    checkTodo: (checkedId) => {
-      setTodos(
-        todos.map((todo, index) => {
-          if (checkedId === index) {
-            todo.status = 'completed';
-          }
-          return todo;
-        }),
-      );
+    updateTodos: () => {
+      setTodos([...todos]);
     },
     removeTodo: (checkedId) => {
-      setTodos(todos.filter((_, index) => checkedId !== index));
+      setTodos(todos.filter((todo) => checkedId !== todo.id));
     },
   };
 };
