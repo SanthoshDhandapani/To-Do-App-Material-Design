@@ -6,6 +6,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
   },
   context: resolve(__dirname, '../../src'),
   module: {
@@ -18,6 +21,13 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: ['babel-loader', 'awesome-typescript-loader'],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+        ],
       },
     ],
   },
