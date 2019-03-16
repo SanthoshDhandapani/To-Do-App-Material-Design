@@ -57,6 +57,74 @@ const onSaveClick = (values, updateItem, todo: IToDo, edits, update) => {
   Promise.all([updateItem(), onCancelClick(todo, edits, update)]);
 };
 
+const ModifyTodo = ({
+  pTodo,
+  pModifiedValues,
+  pOnEnter,
+  pUpdateItem,
+  pEditEntries,
+  pUpdateActions,
+}) => (
+  <Grid item={true} xs={10}>
+    <MInput
+      mFormControlProps={{
+        fullWidth: true,
+        style: { marginTop: -20 },
+      }}
+      mInputProps={{
+        defaultValue: pTodo.text,
+        onChange: (e) => {
+          pModifiedValues[pTodo.id] = e.target.value;
+        },
+        onKeyDown: (e) => {
+          pOnEnter(e, () => {
+            onSaveClick(
+              pModifiedValues,
+              pUpdateItem,
+              pTodo,
+              pEditEntries,
+              pUpdateActions,
+            );
+          });
+        },
+      }}
+    />
+  </Grid>
+);
+
+const UpdateButton = ({
+  pisEdit,
+  pTodo,
+  pEditEntries,
+  pUpdateActions,
+  pUpdateItem,
+}) =>
+  !pisEdit ? (
+    <IconButton
+      aria-label='Edit'
+      onClick={() => {
+        onEditClick(pTodo, pEditEntries, pUpdateActions);
+      }}
+    >
+      <Edit fontSize={'small'} style={{ color: mColors.completedLite }} />
+    </IconButton>
+  ) : (
+    <IconButton
+      aria-label='Save'
+      onClick={(e) =>
+        onSaveClick(
+          modifiedValues,
+          pUpdateItem,
+          pTodo,
+          pEditEntries,
+          pUpdateActions,
+        )
+      }
+    >
+      <Save fontSize={'small'} style={{ color: mColors.lite }} />
+    </IconButton>
+  );
+
 export const TodoRow: FunctionComponent<IToDoRowProps> = ({
   updateActions,
   actionProps,
@@ -105,63 +173,25 @@ export const TodoRow: FunctionComponent<IToDoRowProps> = ({
             </Typography>
           )
         ) : (
-          <Grid item={true} xs={10}>
-            <MInput
-              mFormControlProps={{
-                fullWidth: true,
-                style: { marginTop: -20 },
-              }}
-              mInputProps={{
-                defaultValue: todo.text,
-                onChange: (e) => {
-                  modifiedValues[todo.id] = e.target.value;
-                  // modifiedValues = { ...modifiedValues };
-                },
-                onKeyDown: (e) => {
-                  onEnter(e, () => {
-                    onSaveClick(
-                      modifiedValues,
-                      updateItem,
-                      todo,
-                      editEntries,
-                      updateActions,
-                    );
-                  });
-                },
-              }}
-            />
-          </Grid>
+          <ModifyTodo
+            pTodo={todo}
+            pEditEntries={editEntries}
+            pOnEnter={onEnter}
+            pUpdateActions={updateActions}
+            pUpdateItem={updateItem}
+            pModifiedValues={modifiedValues}
+          />
         )}
         <ListItemSecondaryAction>
-          {isActive &&
-            (!isEdit ? (
-              <IconButton
-                aria-label='Edit'
-                onClick={() => {
-                  onEditClick(todo, editEntries, updateActions);
-                }}
-              >
-                <Edit
-                  fontSize={'small'}
-                  style={{ color: mColors.completedLite }}
-                />
-              </IconButton>
-            ) : (
-              <IconButton
-                aria-label='Edit'
-                onClick={(e) =>
-                  onSaveClick(
-                    modifiedValues,
-                    updateItem,
-                    todo,
-                    editEntries,
-                    updateActions,
-                  )
-                }
-              >
-                <Save fontSize={'small'} style={{ color: mColors.lite }} />
-              </IconButton>
-            ))}
+          {isActive && (
+            <UpdateButton
+              pisEdit={isEdit}
+              pEditEntries={editEntries}
+              pTodo={todo}
+              pUpdateActions={updateActions}
+              pUpdateItem={updateItem}
+            />
+          )}
           {!isEdit ? (
             <IconButton
               aria-label='Delete'
