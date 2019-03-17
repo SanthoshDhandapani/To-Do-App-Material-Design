@@ -67,9 +67,9 @@ const TodoRowComponent: FunctionComponent<IProps> = memo(
       isActive && Object.keys(editEntries).indexOf(todo.id + '') !== -1;
 
     // Declaring sizes for responsiveness
-    const gridSizes: IGridSizes = { xs: 10, sm: 10, md: 11, lg: 11 };
+    const gridSizes: IGridSizes = { xs: 11, sm: 10, md: 11, lg: 11 };
     if (isActive) {
-      gridSizes.xs = !isEdit ? 6 : 10;
+      gridSizes.xs = !isEdit ? 7 : 9;
       gridSizes.sm = !isEdit ? 8 : 12;
       gridSizes.md = !isEdit ? 8 : 11;
       gridSizes.lg = !isEdit ? 9 : 11;

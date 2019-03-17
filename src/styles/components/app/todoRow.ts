@@ -11,7 +11,7 @@ export const style = createStyles({
   },
   rowText: {
     marginTop: '3px',
-    wordBreak: 'break-all',
+    wordBreak: 'break-word',
   },
   warnAction: { color: mColors.warn },
   input: {
