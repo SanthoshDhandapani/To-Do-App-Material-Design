@@ -1,8 +1,16 @@
-# ToDo App - Material Design
+# ToDo App - Material Design (ReactJs)
 
-> **Demo**: https://todo-app-react-2019.herokuapp.com/
+**Demo**: https://todo-app-react-2019.herokuapp.com/
 
-> A basic todo app without authentication or persistent storage starter.
+> **Laptop Screenshot**
+
+![laptop_todo](https://user-images.githubusercontent.com/10140204/54498158-4e709a80-4929-11e9-983a-75d511c53724.png)
+
+> **Mobile  Screenshot**
+
+![todo_app_mobile](https://user-images.githubusercontent.com/10140204/54498142-1d906580-4929-11e9-8a13-a3cd895438eb.jpeg)
+
+> A basic todo app without authentication or persistent storage starter. 
 
 > Then why this is here :P It is just a responsive lite weight demo app built with react 16.8.x.
 
