@@ -1,5 +1,3 @@
-import { AppBar, Toolbar, Typography } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import * as React from 'react';
 import MuiTheme from '../assets/theme';

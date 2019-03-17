@@ -1,5 +1,5 @@
-import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
-import React, { Fragment, memo } from 'react';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import React, { memo } from 'react';
 
 const Header = memo(() => (
   <div style={{ flexGrow: 1 }}>

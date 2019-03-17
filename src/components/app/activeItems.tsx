@@ -69,12 +69,8 @@ const ActiveTodoList = memo(
             </Typography>
           </Grid>
         ) : (
-          <Grid
-            container={true}
-            direction={'row'}
-            style={{ marginTop: '-10px' }}
-          >
-            <Grid item={true} xs={12}>
+          <Grid container={true} style={{ marginTop: '-10px' }}>
+            <Grid item={true} xs={12} direction={'row'}>
               <List disablePadding={true}>
                 {todoList.map((todoObj, index) => (
                   <ActiveTodoRow

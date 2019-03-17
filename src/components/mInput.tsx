@@ -10,33 +10,9 @@ import {
 import { SimplePaletteColorOptions } from '@material-ui/core/styles/createPalette';
 import React, { memo } from 'react';
 import { IExtendedTheme } from '../assets/theme';
+import { style } from '../styles/components/mInput';
 
-const styles = (theme: IExtendedTheme) => {
-  const primaryColor = (theme.palette.primary as SimplePaletteColorOptions)
-    .main;
-  return createStyles({
-    cssLabel: {
-      '&$cssFocused': {
-        color: primaryColor,
-      },
-    },
-    cssFocused: {},
-    cssUnderline: {
-      '&:before': {
-        borderBottomColor: theme.input.underline,
-      },
-      '&:hover:not($disabled):before,&:before': {
-        borderColor: `${theme.input.underline} !important`,
-        borderWidth: '1px !important',
-      },
-      '&:after': {
-        borderBottomColor: primaryColor,
-      },
-    },
-  });
-};
-
-interface ICustomizedInputProps extends WithStyles<typeof styles> {
+interface ICustomizedInputProps extends WithStyles<typeof style> {
   floating?: boolean;
   mFormControlProps?: FormControlProps;
   mInputLabelProps?: InputLabelProps;
@@ -77,4 +53,4 @@ const CustomizedInput: IProps = memo(
   ),
 );
 
-export const MInput = withStyles(styles)(CustomizedInput);
+export const MInput = withStyles(style)(CustomizedInput);

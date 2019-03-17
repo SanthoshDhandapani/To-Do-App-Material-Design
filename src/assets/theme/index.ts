@@ -1,7 +1,6 @@
-import { colors, createMuiTheme, Theme } from '@material-ui/core';
-import { lightBlue } from '@material-ui/core/colors';
+import { createMuiTheme } from '@material-ui/core';
 import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
-import { BoxShadowProperty, Color } from 'csstype';
+import { Color } from 'csstype';
 import { hexToRgb, rgbWithAlpha } from '../../utils/color';
 import { mColors } from '../colors';
 

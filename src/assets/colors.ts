@@ -11,6 +11,7 @@ export const mColors: IMColors = {
   activeLite: '#ffaa2e',
   completed: '#5cb860',
   completedLite: '#6abe6d',
+  warn: '#F44336',
 };
 
 interface IMColors {
@@ -23,4 +24,5 @@ interface IMColors {
   activeLite: Color;
   completed: Color;
   completedLite: Color;
+  warn: Color;
 }

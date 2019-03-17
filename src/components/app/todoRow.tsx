@@ -2,15 +2,13 @@ import {
   Divider,
   Fab,
   Grid,
-  IconButton,
   ListItem,
   ListItemSecondaryAction,
-  ListItemText,
-  Popover,
   Typography,
-  withStyles,
   WithStyles,
+  withStyles,
 } from '@material-ui/core';
+import { GridSize } from '@material-ui/core/Grid';
 import Close from '@material-ui/icons/Close';
 import Delete from '@material-ui/icons/Delete';
 import Check from '@material-ui/icons/Done';
@@ -18,10 +16,17 @@ import Edit from '@material-ui/icons/Edit';
 import Save from '@material-ui/icons/SaveAlt';
 import React, { Fragment, FunctionComponent, memo } from 'react';
 import { mColors } from '../../assets/colors';
-import { IActions, TEdit } from '../../hooks/actions';
+import { IActions } from '../../hooks/actions';
 import { IToDo } from '../../hooks/todo';
-import { MInput } from '../mInput';
-
+import { style } from '../../styles/components/app/todoRow';
+import {
+  ActionIcon,
+  ModifyTodo,
+  onCancelClick,
+  onEditClick,
+  onSaveClick,
+  UpdateActionIcon,
+} from './row';
 interface IToDoRowProps {
   completed?: boolean;
   rowIndex;
@@ -33,187 +38,166 @@ interface IToDoRowProps {
   updateActions?: (actions: IActions) => any;
 }
 
+interface IGridSizes {
+  xs?: GridSize;
+  sm?: GridSize;
+  md?: GridSize;
+  lg?: GridSize;
+}
+
 const modifiedValues: Record<number, string> = [];
 
-const onEditClick = (todo: IToDo, edits: TEdit, update) => {
-  const id = todo.id;
-  edits[id] = todo;
-  modifiedValues[id] = todo.text;
-  update({ edit: { ...edits } });
-};
+interface IProps extends IToDoRowProps, WithStyles<typeof style> {}
 
-const onCancelClick = (todo: IToDo, edits: TEdit, update) => {
-  delete edits[todo.id];
-  update({ edit: { ...edits } });
-};
+const TodoRowComponent: FunctionComponent<IProps> = memo(
+  ({
+    classes,
+    updateActions,
+    actionProps,
+    completed,
+    deleteItem,
+    rowIndex,
+    onEnter,
+    updateItem,
+    todo,
+  }) => {
+    const isActive = !completed;
+    const editEntries = actionProps.edit;
+    const isEdit =
+      isActive && Object.keys(editEntries).indexOf(todo.id + '') !== -1;
 
-const onSaveClick = (values, updateItem, todo: IToDo, edits, update) => {
-  const updatedValue = values[todo.id];
-  updatedValue.trim();
-  if (updatedValue.length !== 0) {
-    todo.text = updatedValue;
-  }
-  delete values[todo.id];
-  Promise.all([updateItem(), onCancelClick(todo, edits, update)]);
-};
+    // Declaring sizes for responsiveness
+    const gridSizes: IGridSizes = { xs: 10, sm: 10, md: 11, lg: 11 };
+    if (isActive) {
+      gridSizes.xs = !isEdit ? 6 : 10;
+      gridSizes.sm = !isEdit ? 8 : 12;
+      gridSizes.md = !isEdit ? 8 : 11;
+      gridSizes.lg = !isEdit ? 9 : 11;
+    }
 
-const ModifyTodo = ({
-  pTodo,
-  pModifiedValues,
-  pOnEnter,
-  pUpdateItem,
-  pEditEntries,
-  pUpdateActions,
-}) => (
-  <Grid item={true} xs={10}>
-    <MInput
-      mFormControlProps={{
-        fullWidth: true,
-        style: { marginTop: -20 },
-      }}
-      mInputProps={{
-        defaultValue: pTodo.text,
-        onChange: (e) => {
-          pModifiedValues[pTodo.id] = e.target.value;
-        },
-        onKeyDown: (e) => {
-          pOnEnter(e, () => {
-            onSaveClick(
-              pModifiedValues,
-              pUpdateItem,
-              pTodo,
-              pEditEntries,
-              pUpdateActions,
-            );
-          });
-        },
-      }}
-    />
-  </Grid>
+    return (
+      <Fragment>
+        <ListItem>
+          {isActive && !isEdit && (
+            <Grid item={true} xs={2} lg={1}>
+              <Fab
+                aria-label='Check'
+                className={classes.doneBtn}
+                color={'primary'}
+              >
+                <Check
+                  onClick={() => {
+                    todo.status = 'completed';
+                    updateItem();
+                  }}
+                  tabIndex={rowIndex}
+                />
+              </Fab>
+            </Grid>
+          )}
+          <Grid
+            item={true}
+            // Takes care the responsiveness of the row
+            xs={gridSizes.xs}
+            sm={gridSizes.sm}
+            md={gridSizes.md}
+            lg={gridSizes.lg}
+          >
+            {!isEdit ? (
+              <Typography
+                component={'p'}
+                variant='body1'
+                color={isActive ? 'textPrimary' : 'textSecondary'}
+                className={classes.rowText}
+              >
+                {todo.text}
+              </Typography>
+            ) : (
+              // Renders input with row value when the row is in edit mode
+              <ModifyTodo
+                value={todo.text}
+                formControlProps={{
+                  fullWidth: true,
+                  className: classes.inputContainer,
+                }}
+                onInputChangeCallBack={(e) => {
+                  modifiedValues[todo.id] = e.target.value;
+                }}
+                onKeyEnterCallBack={(e) => {
+                  onEnter(e, () => {
+                    onSaveClick(
+                      modifiedValues,
+                      updateItem,
+                      todo,
+                      editEntries,
+                      updateActions,
+                    );
+                  });
+                }}
+              />
+            )}
+          </Grid>
+
+          <ListItemSecondaryAction>
+            {// Render update button only for active rows
+            isActive && (
+              <UpdateActionIcon
+                pIsEdit={isEdit}
+                saveCallBack={() => {
+                  onSaveClick(
+                    modifiedValues,
+                    updateItem,
+                    todo,
+                    editEntries,
+                    updateActions,
+                  );
+                }}
+                editCallBack={() => {
+                  onEditClick(modifiedValues, todo, editEntries, updateActions);
+                }}
+                EditIcon={
+                  <Edit
+                    fontSize={'small'}
+                    style={{ color: mColors.completedLite }}
+                  />
+                }
+                SaveIcon={
+                  <Save fontSize={'small'} style={{ color: mColors.lite }} />
+                }
+              />
+            )}
+            {!isEdit ? (
+              // Render delete button for removing the todo
+              <ActionIcon
+                onClickCallBack={() => {
+                  deleteItem(todo.id);
+                }}
+                ariaLabel={'Delete'}
+                Icon={
+                  <Delete fontSize={'small'} style={{ color: mColors.warn }} />
+                }
+              />
+            ) : (
+              // Render cancel button if row is in edit mode
+              <ActionIcon
+                onClickCallBack={() => {
+                  onCancelClick(todo, editEntries, updateActions);
+                }}
+                ariaLabel={'Close'}
+                Icon={
+                  <Close fontSize={'small'} style={{ color: mColors.warn }} />
+                }
+              />
+            )}
+          </ListItemSecondaryAction>
+        </ListItem>
+
+        <Divider />
+      </Fragment>
+    );
+  },
 );
 
-const UpdateButton = ({
-  pisEdit,
-  pTodo,
-  pEditEntries,
-  pUpdateActions,
-  pUpdateItem,
-}) =>
-  !pisEdit ? (
-    <IconButton
-      aria-label='Edit'
-      onClick={() => {
-        onEditClick(pTodo, pEditEntries, pUpdateActions);
-      }}
-    >
-      <Edit fontSize={'small'} style={{ color: mColors.completedLite }} />
-    </IconButton>
-  ) : (
-    <IconButton
-      aria-label='Save'
-      onClick={(e) =>
-        onSaveClick(
-          modifiedValues,
-          pUpdateItem,
-          pTodo,
-          pEditEntries,
-          pUpdateActions,
-        )
-      }
-    >
-      <Save fontSize={'small'} style={{ color: mColors.lite }} />
-    </IconButton>
-  );
-
-export const TodoRow: FunctionComponent<IToDoRowProps> = ({
-  updateActions,
-  actionProps,
-  completed,
-  deleteItem,
-  rowIndex,
-  onEnter,
-  updateItem,
-  todo,
-}) => {
-  const isActive = !completed;
-  const editEntries = actionProps.edit;
-  const isEdit =
-    isActive && Object.keys(editEntries).indexOf(todo.id + '') !== -1;
-
-  return (
-    <Fragment>
-      <ListItem>
-        {isActive && !isEdit && (
-          <Fab
-            aria-label='Check'
-            style={{
-              width: 30,
-              height: 30,
-              minWidth: 0,
-              minHeight: 0,
-              boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2)',
-            }}
-            color={'primary'}
-          >
-            <Check
-              onClick={() => {
-                todo.status = 'completed';
-                updateItem();
-              }}
-              tabIndex={rowIndex}
-            />
-          </Fab>
-        )}
-        {!isEdit ? (
-          isActive ? (
-            <ListItemText style={{ marginTop: '3px' }} primary={todo.text} />
-          ) : (
-            <Typography variant={'body1'} color='textSecondary'>
-              {todo.text}
-            </Typography>
-          )
-        ) : (
-          <ModifyTodo
-            pTodo={todo}
-            pEditEntries={editEntries}
-            pOnEnter={onEnter}
-            pUpdateActions={updateActions}
-            pUpdateItem={updateItem}
-            pModifiedValues={modifiedValues}
-          />
-        )}
-        <ListItemSecondaryAction>
-          {isActive && (
-            <UpdateButton
-              pisEdit={isEdit}
-              pEditEntries={editEntries}
-              pTodo={todo}
-              pUpdateActions={updateActions}
-              pUpdateItem={updateItem}
-            />
-          )}
-          {!isEdit ? (
-            <IconButton
-              aria-label='Delete'
-              onClick={() => {
-                deleteItem(todo.id);
-              }}
-            >
-              <Delete fontSize={'small'} style={{ color: '#F44336' }} />
-            </IconButton>
-          ) : (
-            <IconButton
-              aria-label='Close'
-              onClick={() => {
-                onCancelClick(todo, editEntries, updateActions);
-              }}
-            >
-              <Close fontSize={'small'} style={{ color: '#F44336' }} />
-            </IconButton>
-          )}
-        </ListItemSecondaryAction>
-      </ListItem>
-      <Divider />
-    </Fragment>
-  );
-};
+export const TodoRow = withStyles(style)(
+  TodoRowComponent as React.FunctionComponent<IToDoRowProps>,
+);
