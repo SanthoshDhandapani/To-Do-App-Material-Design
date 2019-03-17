@@ -1,16 +1,19 @@
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import * as React from 'react';
 import MuiTheme from '../assets/theme';
-import ActiveTodoList from '../components/app/activeItems';
-import AddTodo from '../components/app/addItem';
-import CompletedTodoList from '../components/app/completed';
-import Container from '../components/container';
-import Header from '../components/header';
+import { Container, Header } from '../components';
+import { ActiveTodoList, AddTodo, CompletedTodoList } from '../components/app';
 import { actionsHook, todoHook } from '../hooks';
 
-const App: React.FunctionComponent = (props) => {
+export const App: React.FunctionComponent = (props) => {
   const { actionObj, updateActions, todoObj, ...actions } = actionsHook();
-  const { todos, addTodo, updateTodos, removeTodo } = todoHook();
+  const {
+    addTodo,
+    activeTodos,
+    completedTodos,
+    updateTodos,
+    removeTodo,
+  } = todoHook();
   return (
     <MuiThemeProvider theme={MuiTheme}>
       <Header />
@@ -31,16 +34,14 @@ const App: React.FunctionComponent = (props) => {
           update={updateTodos}
           deleteProp={removeTodo}
           onKeyInput={actions.keyInput}
-          todoList={todos.filter((todo) => todo.status === 'active')}
+          todoList={activeTodos()}
         />
         <CompletedTodoList
           actions={actionObj}
           deleteProp={removeTodo}
-          completedList={todos.filter((todo) => todo.status === 'completed')}
+          completedList={completedTodos()}
         />
       </Container>
     </MuiThemeProvider>
   );
 };
-
-export default App;

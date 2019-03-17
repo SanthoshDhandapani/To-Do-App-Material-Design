@@ -7,12 +7,11 @@ import {
 } from '@material-ui/core';
 import ViewListSharp from '@material-ui/icons/ViewListSharp';
 import React, { memo } from 'react';
+import { CardIcon, SectionCard } from '../';
 import { IThemeProps } from '../../assets/theme';
 import { IActions } from '../../hooks/actions';
 import { IToDo } from '../../hooks/todo';
 import { style } from '../../styles/components/app/active';
-import CardIcon from '../cardIcon';
-import SectionCard from '../sectionCard';
 import { TodoRow as ActiveTodoRow } from './todoRow';
 
 interface IActiveTodoListComponentProps {
@@ -35,7 +34,7 @@ const IconComponent = ({ iconStyle }) => (
   </CardIcon>
 );
 
-const ActiveTodoList = memo(
+const ActiveTodoListComponent = memo(
   ({
     actions,
     classes,
@@ -70,7 +69,7 @@ const ActiveTodoList = memo(
           </Grid>
         ) : (
           <Grid container={true} style={{ marginTop: '-10px' }}>
-            <Grid item={true} xs={12} direction={'row'}>
+            <Grid item={true} xs={12}>
               <List disablePadding={true}>
                 {todoList.map((todoObj, index) => (
                   <ActiveTodoRow
@@ -93,6 +92,8 @@ const ActiveTodoList = memo(
   ),
 );
 
-export default withStyles(style, { withTheme: true })(
-  ActiveTodoList as React.FunctionComponent<IActiveTodoListComponentProps>,
+export const ActiveTodoList = withStyles(style, { withTheme: true })(
+  ActiveTodoListComponent as React.FunctionComponent<
+    IActiveTodoListComponentProps
+  >,
 );

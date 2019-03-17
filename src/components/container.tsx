@@ -1,10 +1,10 @@
-import { Grid, Paper, withStyles, WithStyles } from '@material-ui/core';
+import { Grid, withStyles, WithStyles } from '@material-ui/core';
 import React, { memo } from 'react';
 import { style } from '../styles/components/container';
 
 interface IProps extends React.FunctionComponent<WithStyles<typeof style>> {}
 
-const Container: IProps = memo(({ classes, children }) => (
+const ContainerComponent: IProps = memo(({ classes, children }) => (
   <Grid
     className={classes.layout}
     container={true}
@@ -17,4 +17,4 @@ const Container: IProps = memo(({ classes, children }) => (
   </Grid>
 ));
 
-export default withStyles(style)(Container);
+export const Container = withStyles(style)(ContainerComponent);

@@ -1,13 +1,11 @@
 import { Fab, Grid, withStyles, WithStyles } from '@material-ui/core';
 import { InputProps } from '@material-ui/core/Input';
 import AddIcon from '@material-ui/icons/Add';
-import PriorityHighSharp from '@material-ui/icons/PriorityHighSharp';
+import Assignment from '@material-ui/icons/Assignment';
 import React, { Fragment, memo } from 'react';
+import { CardIcon, MInput, SectionCard } from '../';
 import { IThemeProps } from '../../assets/theme';
 import { style } from '../../styles/components/app/addItem';
-import CardIcon from '../cardIcon';
-import { MInput } from '../mInput';
-import SectionCard from '../sectionCard';
 
 interface IAddTodoComponentProps {
   value?: string;
@@ -24,11 +22,11 @@ interface IProps
 
 const IconComponent = ({ iconStyle }) => (
   <CardIcon>
-    <PriorityHighSharp style={iconStyle} />
+    <Assignment style={iconStyle} />
   </CardIcon>
 );
 
-const AddTodo = memo(
+const AddTodoComponent = memo(
   ({ classes, theme, value, inputProps, ...props }: IProps) => {
     const addTodoItem = () => {
       props.onAddClick(value);
@@ -85,6 +83,6 @@ const AddTodo = memo(
   },
 );
 
-export default withStyles(style, { withTheme: true })(
-  AddTodo as React.FunctionComponent<IAddTodoComponentProps>,
+export const AddTodo = withStyles(style, { withTheme: true })(
+  AddTodoComponent as React.FunctionComponent<IAddTodoComponentProps>,
 );

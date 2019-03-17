@@ -7,13 +7,12 @@ import {
 } from '@material-ui/core';
 import Check from '@material-ui/icons/BeenhereSharp';
 import React, { memo } from 'react';
+import { CardIcon, SectionCard } from '../';
 import { IThemeProps } from '../../assets/theme';
 import { IActions } from '../../hooks/actions';
 import { IToDo } from '../../hooks/todo';
 import { style } from '../../styles/components/app/completed';
 import { TodoRow as CompletedTodoRow } from '../app/todoRow';
-import CardIcon from '../cardIcon';
-import SectionCard from '../sectionCard';
 
 const IconComponent = ({ iconStyle }) => (
   <CardIcon completed={true}>
@@ -32,7 +31,7 @@ interface IProps
     IThemeProps,
     WithStyles<typeof style> {}
 
-const CompletedTodoList = memo(
+const CompletedTodoListComponent = memo(
   ({ actions, classes, deleteProp, theme, completedList }: IProps) => (
     <Grid
       container={true}
@@ -83,8 +82,8 @@ const CompletedTodoList = memo(
   ),
 );
 
-export default withStyles(style, { withTheme: true })(
-  CompletedTodoList as React.FunctionComponent<
-    ICompletedTodoListComponentProps
-  >,
-);
+export const CompletedTodoList = withStyles(style, {
+  withTheme: true,
+})(CompletedTodoListComponent as React.FunctionComponent<
+  ICompletedTodoListComponentProps
+>);

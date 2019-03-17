@@ -15,7 +15,7 @@ interface ICardIconStyleProps
 export interface ICardIconComponentProps
   extends React.FunctionComponent<ICardIconStyleProps> {}
 
-const CardIcon: ICardIconComponentProps = ({
+const CardIconComponent: ICardIconComponentProps = ({
   classes,
   children,
   active,
@@ -29,4 +29,4 @@ const CardIcon: ICardIconComponentProps = ({
   return <div className={classes.card + ' ' + boxClass}>{children}</div>;
 };
 
-export default withStyles(style)(CardIcon);
+export const CardIcon = withStyles(style)(CardIconComponent);

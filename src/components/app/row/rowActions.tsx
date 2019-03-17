@@ -1,12 +1,8 @@
+import { Grid, IconButton } from '@material-ui/core';
 import { FormControlProps } from '@material-ui/core/FormControl';
-
-import { IToDo } from '../../../hooks/todo';
-
-import { TEdit } from '../../../hooks/actions';
-
-import { Grid, IconButton, Typography } from '@material-ui/core';
-import { classes } from 'istanbul-lib-coverage';
 import React, { memo } from 'react';
+import { TEdit } from '../../../hooks/actions';
+import { IToDo } from '../../../hooks/todo';
 import { MInput } from '../../mInput';
 
 interface IModifyTodoProps {

@@ -1,15 +1,8 @@
 import FormControl, { FormControlProps } from '@material-ui/core/FormControl';
 import Input, { InputProps } from '@material-ui/core/Input';
 import InputLabel, { InputLabelProps } from '@material-ui/core/InputLabel';
-import {
-  createStyles,
-  Theme,
-  withStyles,
-  WithStyles,
-} from '@material-ui/core/styles';
-import { SimplePaletteColorOptions } from '@material-ui/core/styles/createPalette';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import React, { memo } from 'react';
-import { IExtendedTheme } from '../assets/theme';
 import { style } from '../styles/components/mInput';
 
 interface ICustomizedInputProps extends WithStyles<typeof style> {

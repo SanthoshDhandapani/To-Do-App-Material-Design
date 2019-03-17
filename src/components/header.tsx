@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import React, { memo } from 'react';
 
-const Header = memo(() => (
+export const Header = memo(() => (
   <div style={{ flexGrow: 1 }}>
     <AppBar style={{ alignItems: 'center' }}>
       <Toolbar>
@@ -12,5 +12,3 @@ const Header = memo(() => (
     </AppBar>
   </div>
 ));
-
-export default Header;
