@@ -1,6 +1,6 @@
 # ToDo App - Material Design
 
-> **Demo**: (https://todo-app-react-2019.herokuapp.com/)\*\*
+> **Demo**: https://todo-app-react-2019.herokuapp.com/
 
 > A basic todo app without authentication or persistent storage starter.
 
