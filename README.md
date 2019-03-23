@@ -10,7 +10,7 @@
 
 ![todo_app_mobile](https://user-images.githubusercontent.com/10140204/54498142-1d906580-4929-11e9-8a13-a3cd895438eb.jpeg)
 
-> A basic todo app without authentication or persistent storage starter.
+> A basic todo app without authentication or persistent storage.
 
 > Then why this is here :P It is just a responsive lite weight demo app built with react 16.8.x.
 
@@ -23,8 +23,8 @@
 - **[Webpack](https://webpack.js.org/)** (4.x)
 - **[Typescript](https://www.typescriptlang.org/)** (3.x)
 - **[Hot Module Replacement (HMR)](https://webpack.js.org/concepts/hot-module-replacement/)** using [React Hot Loader](https://github.com/gaearon/react-hot-loader) (4.x)
-- **[[Babel]**[(http://babeljs.io/) (7.x)
-- **[[Jest]**[(https://facebook.github.io/jest/) - Testing framework for React applications
+- [Babel](http://babeljs.io/) (7.x)
+- [Jest](https://facebook.github.io/jest/) - For Testing
 - Typescript compiling using [Awesome Typescript Loader](https://github.com/s-panferov/awesome-typescript-loader) (5.x)
 - Code quality (linting) for Typescript.
 - Linting rules - [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) and custom rules can be defined in lint/rules
