@@ -1,34 +1,34 @@
-import { IToDo, todoHookModel } from '../src/hooks/todo';
+import { todoHookModel } from '../src/hooks/todo';
 import { todosList1, todosList2 } from '../src/utils/mocks/todos_mock_list';
 
-let todos: IToDo[] = [];
-
-const setToDoMock = () => (todoList) => {
-  todos = [...todoList];
+const getTodoHook = (todos) => {
+  let todoHook;
+  const setToDoMock = () => (todoList) => {
+    todoHook.todos = todoList;
+  };
+  todoHook = { ...todoHookModel(todos, setToDoMock()) };
+  return todoHook;
 };
-const { addTodo, updateTodos, ...toDoModel } = todoHookModel(
-  todos,
-  setToDoMock,
-);
 
 test('Add a single todo and expect active list to have that', () => {
+  const { todos, addTodo } = getTodoHook([]);
   const todoText = 'Buy milk today';
   addTodo(todoText);
   expect(todos[0].text).toEqual(todoText);
 });
 
 describe('Add list of todo tasks and verify those are added in active list', () => {
-  const todosCount = todosList1.length;
   let allMatched = false;
-  const mockList = [...todosList1];
   test('Updated todos list size, matching initial todos list size', () => {
-    todos.splice(0, todos.length);
-    mockList.forEach((todo) => {
+    const { addTodo, activeTodos } = getTodoHook([]);
+    const todosCount = todosList1.length;
+    todosList1.forEach((todo) => {
       addTodo(todo);
     });
-    expect(todos.length).toEqual(todosCount);
-    todos.forEach((todo) => {
-      allMatched = mockList.indexOf(todo.text) !== -1;
+    const activeList = activeTodos();
+    expect(activeList.length).toEqual(todosCount);
+    activeList.forEach((todo) => {
+      allMatched = todosList1.indexOf(todo.text) !== -1;
       if (!allMatched) return;
     });
   });
@@ -37,36 +37,35 @@ describe('Add list of todo tasks and verify those are added in active list', () 
   });
 });
 
-describe('Update and move item to completed', () => {
+describe('Update and move item from to completed and remove the completed item', () => {
   const check = 'I am the only one active';
   const updateText = 'I am the updated active';
   let activeTodosCount;
   let completedTodosCount;
   const mockList = todosList2;
+  let updatedList = [];
+
   test('Updated a to do item - (' + check + ')', () => {
-    toDoModel.todos = [...mockList];
-    updateTodos();
-    const activeList = toDoModel.todos.filter(
-      (todo) => todo.status === 'active',
-    );
+    const { todos, updateTodos, activeTodos, completedTodos } = getTodoHook([
+      ...mockList,
+    ]);
+    const activeList = activeTodos();
     activeTodosCount = activeList.length;
-    completedTodosCount = toDoModel.todos.filter(
-      (todo) => todo.status === 'completed',
-    ).length;
-    let updated: boolean;
+    completedTodosCount = completedTodos().length;
     const foundTodo = activeList.find((todo) => todo.text === check);
     if (foundTodo) {
       foundTodo.text = updateText;
-      updated = true;
     }
     updateTodos();
-    expect(updated).toBe(true);
+    updatedList = todos;
+    expect(!!foundTodo).toBe(true);
   });
 
   test('Move the updated item to completed', () => {
-    const activeList = toDoModel.todos.filter(
-      (todo) => todo.status === 'active',
-    );
+    const { todos, activeTodos, completedTodos } = getTodoHook([
+      ...updatedList,
+    ]);
+    const activeList = activeTodos();
     activeList.forEach((todo) => {
       if (todo.text === updateText) {
         todo.status = 'completed';
@@ -74,13 +73,22 @@ describe('Update and move item to completed', () => {
         return;
       }
     });
-    const completedList = toDoModel.todos.filter(
-      (todo) => todo.status === 'completed',
-    );
-    const expectedActiveListLength = toDoModel.todos.filter(
-      (todo) => todo.status === 'active',
-    ).length;
+    const completedList = completedTodos();
+    const expectedActiveListLength = activeTodos().length;
+    updatedList = todos;
     expect(expectedActiveListLength).toBe(activeTodosCount);
     expect(completedList.length).toBe(completedTodosCount + 1);
+  });
+
+  test('Remove the moved item from completed', () => {
+    const todoHook = getTodoHook([...updatedList]);
+    const completedList = todoHook.completedTodos();
+    const itemToBeDeleted = completedList.find(
+      (todo) => todo.text === updateText,
+    );
+    todoHook.removeTodo(itemToBeDeleted.id);
+    const deletedItem = todoHook.todos.find((todo) => todo.text === updateText);
+    expect(deletedItem).toBe(undefined);
+    updatedList = undefined;
   });
 });
